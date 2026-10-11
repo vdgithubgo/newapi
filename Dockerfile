@@ -24,6 +24,7 @@ ENV SQL_DSN="" \
     LOG_LEVEL=warn \
     DATA_DIR="/data" \
     BACKUP_INTERVAL_SECONDS=14400 \
+    BACKUP_INITIAL_DELAY_SECONDS=150 \
     RESET_CHANNELS_ON_BOOT=false \
     LOG_RETENTION_DAYS="30"
     # REDIS_CONN_STRING=""
@@ -123,6 +124,7 @@ do_backup() {
 # 3. 后台备份守护进程：先睡后备，避免启动瞬间把刚恢复的库又原样传回去
 if [ -n "${SUPABASE_URL:-}" ]; then
 (
+    sleep "${BACKUP_INITIAL_DELAY_SECONDS:-150}" && do_backup  # 启动5分钟后先备一次
     while true; do
         sleep "$BACKUP_INTERVAL"
         do_backup
