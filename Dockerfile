@@ -124,7 +124,7 @@ do_backup() {
 # 3. 后台备份守护进程：先睡后备，避免启动瞬间把刚恢复的库又原样传回去
 if [ -n "${SUPABASE_URL:-}" ]; then
 (
-    sleep "${BACKUP_INITIAL_DELAY_SECONDS:-12000}" && do_backup  # 启动5分钟后先备一次
+    sleep "${BACKUP_INITIAL_DELAY_SECONDS:-120}" && do_backup  # 启动5分钟后先备一次
     while true; do
         sleep "$BACKUP_INTERVAL"
         do_backup
